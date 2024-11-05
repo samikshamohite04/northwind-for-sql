@@ -1,14 +1,172 @@
-<?xml version="1.0"?>
-<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="northwind project">
-  <Items>
-    <LogicalFolder Name="Connections" Type="2" Sorted="true">
-      <Items />
-    </LogicalFolder>
-    <LogicalFolder Name="Queries" Type="0" Sorted="true">
-      <Items />
-    </LogicalFolder>
-    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
-      <Items />
-    </LogicalFolder>
-  </Items>
-</SqlWorkbenchSqlProject>
+select * from [dbo].[Categories]
+select * from [dbo].[Customers]
+select * from [dbo].[Employees]
+SELECT * FROM [dbo].[Shippers]
+SELECT * FROM [dbo].[Order Details]
+select * from [dbo].[EmployeeTerritories]
+select * from [dbo].[CustomerDemographics]
+select * from [dbo].[Sale]
+select * from [dbo].[Products]
+select * from [dbo].[Categories]
+select * from [dbo].[Suppliers]
+SELECT * FROM [dbo].[Orders]
+
+--Create a report that showsthe CategoryName and Description from the categories table sorted by CategoryName.
+select categoryName,Description from Categories
+order by CategoryName
+--Create a report that shows the ContactName, CompanyName, ContactTitle and Phone number from the customers table
+--sorted by Phone.
+select ContactName,CompanyName,ContactTitle,Phone number from Customers
+order by Phone
+--Create a report that shows the capitalized FirstName and capitalized LastName renamed as FirstName and Lastname
+--respectively and HireDate from the employees table sorted from the newest to the oldest employee.
+select upper(FirstName)+' ' +UPPER(LastName) as NAME ,HireDate from Employees
+order by HireDate DESC
+--Create a report that shows the top 10 OrderID, OrderDate, ShippedDate, CustomerID, Freight from the orders table sorted
+--by Freight in descending order.
+SELECT TOP 10 OrderID,OrderDate,ShippedDate,CustomerID, Freight from Orders
+order by Freight desc
+--Create a report that shows all the CustomerID in lowercase letter and renamed as ID from the customers table.
+select lower(CustomerID) AS customerID FROM [dbo].[Customers]
+--Create a report that shows the CompanyName, Fax, Phone, Country, HomePage from the suppliers table sorted by the
+--Country in descending order then by CompanyName in ascending order.
+select CompanyName, Fax, Phone, Country, HomePage  from Suppliers
+order by Country desc,
+CompanyName asc
+--Create a report that shows CompanyName, ContactName of all customers from ‘Buenos Aires' only.
+select CompanyName, ContactName from Customers
+where city = 'Buenos Aires'
+---Create a report showing ProductName, UnitPrice, QuantityPerUnit of products that are out of stock.
+select ProductName, UnitPrice, QuantityPerUnit from Products
+where UnitsInStock= 0;
+--Create a report showing all the ContactName, Address, City of all customers not from Germany, Mexico, Spain.
+select ContactName, Address, City from Customers
+where city !='Germany, Mexico, Spain'
+
+--Create a report showing OrderDate, ShippedDate, CustomerID, Freight of all orders placed on 21 May 1996.
+select OrderDate, ShippedDate, CustomerID, Freight from Orders
+where OrderDate = '1996-05-21'
+--Create a reportshowing FirstName, LastName, Country from the employees not from United States.
+select FirstName, LastName, Country from Employees
+where Country <>'USA'
+--Create a report that showsthe EmployeeID, OrderID, CustomerID, RequiredDate, ShippedDate from all ordersshipped later
+--than the required date.
+SELECT EmployeeID, OrderID, CustomerID, RequiredDate, ShippedDate From Orders
+where ShippedDate > RequiredDate
+--Create a report that shows the City, CompanyName, ContactName of customersfrom cities starting with A or B.
+select City, CompanyName, ContactName from Customers
+where City like 'A%' OR City LIKE 'B%'
+--Create a report showing all the even numbers of OrderID from the orders table.
+SELECT OrderID From Orders
+where OrderID % 2= 0
+--Create a report that shows all the orders where the freight cost more than $500.
+select * from Orders
+where Freight > 500
+--Create a report that shows the ProductName, UnitsInStock, UnitsOnOrder, ReorderLevel of all products that are up for
+--reorder.
+select ProductName, UnitsInStock, UnitsOnOrder, ReorderLevel from Products
+where UnitsOnOrder >= ReorderLevel
+--Create a report that shows the CompanyName, ContactName number of all customer that have no fax number.
+select CompanyName, ContactName number from Customers
+where Fax is null
+--Create a report that shows the FirstName, LastName of all employees that do not report to anybody.
+select FirstName, LastName from Employees
+where ReportsTo is NULL
+--Create a report showing all the odd numbers of OrderID from the orderstable.
+SELECT OrderID FROM Orders
+WHERE OrderID % 2 <> 0
+
+--Create a report thatshowsthe CompanyName, ContactName, Fax of all customersthat do not have Fax number and sorted
+--by ContactName.
+select  CompanyName, ContactName, Fax from Customers
+where Fax is null
+order by ContactName
+--Create a report that shows the City, CompanyName, ContactName of customers from cities that has letter L in the name
+--sorted by ContactName.
+select City, CompanyName, ContactName  from Customers
+where City like 'L%'
+ORDER BY ContactName
+--Create a report that shows the FirstName, LastName, BirthDate of employees born in the 1950s.
+select FirstName, LastName, BirthDate from Employees
+where BirthDate between '1950-01-01'and '1959-12-31'
+--Create a report that shows the FirstName, LastName, the year of Birthdate as birth year from the employees table.
+select FirstName, LastName, YEAR(Birthdate) as birthyear
+from Employees
+--Create a report showing OrderID, total number of Order ID as NumberofOrders from the orderdetails table grouped by
+--OrderID and sorted by NumberofOrders in descending order.
+select OrderID,count(OrderID) AS NumberofOrders from [Order Details]
+group by OrderID
+order by NumberofOrders Desc
+
+--Create a report that shows the SupplierID, ProductName, CompanyName from all product Supplied by Exotic Liquids,
+--Specialty Biscuits, Ltd., Escargots Nouveaux sorted by the supplier ID
+select s.SupplierID,p.ProductName,s.CompanyName
+from Products as p 
+join Suppliers as S
+ON Products.SupplierID = Suppliers.SupplierID
+where s.CompanyName in ('Exotic Liquids','Specialty Biscuits.Ltd', 'Escargots Nouveaux')
+order by s.SupplierID
+---Create a report that shows the ShipPostalCode, OrderID, OrderDate, RequiredDate, ShippedDate, ShipAddress of all orders
+--with ShipPostalCode beginning with "98124".
+select ShipPostalCode,OrderID,OrderDate,RequiredDate,ShippedDate,ShipAddress
+from Orders
+where  ShipPostalCode = '981124%'
+
+--Create a report that shows the ContactName, ContactTitle, CompanyName of customers that the has no "Sales" in their
+--ContactTitle.
+select ContactName, ContactTitle, CompanyName from Customers
+where not ContactTitle like '%sale%'
+
+--Create a report that shows the LastName, FirstName, City of employees in cities other than "Seattle";
+select LastName, FirstName, City from Employees
+where City != 'Seattle'
+--Create a report that shows the CompanyName, ContactTitle, City, Country of all customers in any city in Mexico or other
+--cities in Spain other than Madrid.
+SELECT 
+    CompanyName, 
+    ContactTitle, 
+    City, 
+    Country
+FROM 
+    Customers
+WHERE 
+    (Country = 'Mexico') 
+    OR (Country = 'Spain' AND City <> 'Madrid');
+ 
+--Create a report that shows the ContactName of all customers that do not have letter A as the second alphabet in their
+--Contactname.
+select ContactName from Customers
+where ContactName not like '_a%'
+
+--Create a report that shows the average UnitPrice rounded to the next whole number, total price of UnitsInStock and
+--maximum number of ordersfrom the products table. All saved as AveragePrice, TotalStock and MaxOrder respectively.
+SELECT 
+    CEILING(AVG(UnitPrice)) AS AveragePrice,
+    SUM(UnitPrice * UnitsInStock) AS TotalStock,
+    MAX(UnitsOnOrder) AS MaxOrder
+FROM 
+
+    Products;
+---Create a report that shows the SupplierID, CompanyName, CategoryName, ProductName and UnitPrice from the products,
+--suppliers and categories table.
+SELECT 
+    p.SupplierID,
+    s.CompanyName,
+    c.CategoryName,
+    p.ProductName,
+    p.UnitPrice
+FROM 
+    Products p
+JOIN 
+    Suppliers s ON p.SupplierID = s.SupplierID
+JOIN 
+    Categories c ON p.CategoryID = c.CategoryID;
+
+--Create a report thatshowsthe CustomerID,sum of Freight, from the orderstable with sum of freight greater $200, grouped
+---by CustomerID.
+SELECT CustomerID,sum(Freight) as total_freight from Orders
+group by CustomerID
+having sum(Freight) > 200
+
+--
+
